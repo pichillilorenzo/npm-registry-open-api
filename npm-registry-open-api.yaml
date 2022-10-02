@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
-  title: NPM Open APIs
-  description: NPM Open APIs
+  title: NPM Registry Open APIs
+  description: NPM Registry Open APIs
   version: "1.0"
 servers:
   - url: https://registry.npmjs.org

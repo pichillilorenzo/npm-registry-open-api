@@ -4,7 +4,7 @@
 
 </div>
 
-[![license](https://img.shields.io/github/license/pichillilorenzo/known-http-header-db)](/LICENSE)
+[![license](https://img.shields.io/github/license/pichillilorenzo/npm-registry-open-api)](/LICENSE)
 [![Donate to this project using Paypal](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.me/LorenzoPichilli)
 
 Servers:
@@ -23,6 +23,13 @@ Paths implemented:
 - GET `/downloads/point/{period}/{packageName}`
 - GET `/downloads/range/{period}`
 - GET `/downloads/range/{period}/{packageName}`
+
+## Open API Spec Download
+
+You can download the YAML file using [jsDelivr](https://www.jsdelivr.com/):
+[https://cdn.jsdelivr.net/gh/pichillilorenzo/npm-registry-open-api@main/npm-registry-open-api.yaml](https://cdn.jsdelivr.net/gh/pichillilorenzo/npm-registry-open-api@main/npm-registry-open-api.yaml)
+
+It is recommended to replace `main` with [a release tag](https://github.com/pichillilorenzo/npm-registry-open-api/tags).
 
 ## License
 
