@@ -31,6 +31,13 @@ You can download the YAML file using [jsDelivr](https://www.jsdelivr.com/):
 
 It is recommended to replace `main` with [a release tag](https://github.com/pichillilorenzo/npm-registry-open-api/tags).
 
+## Usage
+
+Using the official [@openapitools/openapi-generator-cli](https://www.npmjs.com/package/@openapitools/openapi-generator-cli) generator:
+```bash
+openapi-generator-cli generate -i https://cdn.jsdelivr.net/gh/pichillilorenzo/npm-registry-open-api@main/npm-registry-open-api.yaml -g typescript-fetch
+```
+
 ## License
 
 Released under the [ISC](/LICENSE) license.
