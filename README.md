@@ -23,6 +23,15 @@ Paths implemented:
 - GET `/downloads/point/{period}/{packageName}`
 - GET `/downloads/range/{period}`
 - GET `/downloads/range/{period}/{packageName}`
+- GET `/versions/{packageName}/last-week`
+- PUT `/-/user/org.couchdb.user:{user}`
+- GET, POST `/-/npm/v1/user`
+- GET, POST `/-/npm/v1/tokens`
+- DELETE `/-/npm/v1/tokens/token/{uuid}`
+- DELETE `/-/user/token/{token}`
+- GET `/-/npm/v1/hooks`
+- POST `/-/npm/v1/hooks/hook`
+- GET, PUT, DELETE `/-/npm/v1/hooks/hook/{id}`
 
 ## Open API Spec Download
 

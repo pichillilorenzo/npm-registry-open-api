@@ -804,8 +804,550 @@ paths:
                           }
                       ]
                     }
+  /versions/{packageName}/last-week:
+    get:
+      description: >-
+        Download count for specific versions of a package. It's only available for the previous 7 days.
+
+        Note: for scoped packages, the `/` needs to be percent encoded. (`@slack/client` -> `@slack%2Fclient`).
+      parameters:
+        - in: path
+          name: packageName
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Package download count for specific versions.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PackageVersionsDownloadCount"
+              examples:
+                "0":
+                  value: >-
+                    {
+                      "package": "fastify",
+                      "downloads": {
+                        "3.1.1": 1409,
+                        "3.27.2": 7670,
+                        "2.14.1": 2824,
+                        "3.24.0": 4475,
+                        "4.0.0": 652,
+                        "3.20.1": 18007,
+                        "3.28.0": 48612,
+                        "4.3.0": 23722
+                      }
+                    }
+  /-/user/org.couchdb.user:{user}:
+    put:
+      description: User login endpoint
+      parameters:
+        - in: path
+          name: user
+          required: true
+          schema:
+            type: string
+            nullable: false
+        - in: header
+          name: 'npm-otp'
+          description: One time password
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+            examples:
+              "0":
+                value: >-
+                  {
+                    "name": "username",
+                    "password": "password"
+                  }
+      responses:
+        "201":
+          description: Successful authentication with Bearer Token.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+              examples:
+                "0":
+                  value: >-
+                    {
+                      "ok": true,
+                      "id": "org.couchdb.user:undefined",
+                      "rev": "_we_dont_use_revs_any_more",
+                      "token": "BEARER TOKEN HERE"
+                    }
+        "401":
+          description: Authentication was unsuccessful.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LegacyStatus"
+              examples:
+                "0":
+                  value: >-
+                    {
+                      "ok": false
+                    }
+  /-/npm/v1/user:
+    get:
+      description: User detail endpoint
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: User detail.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Profile"
+              examples:
+                "0":
+                  value: >-
+                    {
+                      "tfa": {
+                        "pending": false,
+                        "mode": "auth-and-writes"
+                      },
+                      "name": "pichillilorenzo",
+                      "email": "pichillilorenzo@gmail.com",
+                      "email_verified": true,
+                      "created": "2018-06-22T20:36:58.619Z",
+                      "updated": "2022-09-28T15:20:05.334Z",
+                      "cidr_whitelist": null,
+                      "fullname": "Lorenzo Pichilli",
+                      "twitter": "LorenzoPichilli",
+                      "github": "pichillilorenzo"
+                    }
+    post:
+      description: User login endpoint
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: header
+          name: 'npm-otp'
+          description: One time password
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProfileUpdateRequest"
+            examples:
+              "0":
+                value: >-
+                  {
+                    "email": "new_email@example.com",
+                    "github": "new_github_name"
+                  }
+      responses:
+        "200":
+          description: User profile updated with success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Profile"
+              examples:
+                "0":
+                  value: >-
+                    {
+                      "tfa": {
+                        "pending": false,
+                        "mode": "auth-and-writes"
+                      },
+                      "name": "pichillilorenzo",
+                      "email": "pichillilorenzo@gmail.com",
+                      "email_verified": true,
+                      "created": "2018-06-22T20:36:58.619Z",
+                      "updated": "2022-09-28T15:20:05.334Z",
+                      "cidr_whitelist": null,
+                      "fullname": "Lorenzo Pichilli",
+                      "twitter": "LorenzoPichilli",
+                      "github": "pichillilorenzo"
+                    }
+  /-/npm/v1/tokens:
+    get:
+      description: User's token list endpoint
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: User's token list.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TokenPage"
+              examples:
+                "0":
+                  value: >-
+                    {
+                      "objects": [
+                        {
+                          "cidr_whitelist": null,
+                          "readonly": false,
+                          "automation": false,
+                          "created": "2022-10-03T14:37:38.493Z",
+                          "updated": "2022-10-03T14:37:38.493Z",
+                          "key": "48297953007cfb44e3451902d39c5bacf7a4f49369591e511de9f174afa90288f35b4a940a54dfe9f110ac30634443f24667c673fb65ef771954236c51e9b036",
+                          "token": "npm_y7"
+                        },
+                        {
+                          "cidr_whitelist": null,
+                          "readonly": false,
+                          "automation": false,
+                          "created": "2022-10-03T14:37:27.154Z",
+                          "updated": "2022-10-03T14:37:27.154Z",
+                          "key": "fa06877427ed1fd75abd41c2fe12fa12b100e93b4dd00df46f653fa67de8b9ec38dd6982401adf360c3d380af432f619434b30199ec92332b96e42ce2802a0c9",
+                          "token": "npm_zL"
+                        }
+                      ],
+                      "total": 24,
+                      "urls": {
+                          "next": "/-/npm/v1/tokens?page=1"
+                      },
+                      "userHasOldFormatToken": true
+                    }
+    post:
+      description: Token create endpoint
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: header
+          name: 'npm-otp'
+          description: One time password
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TokenCreationRequest"
+            examples:
+              "0":
+                value: >-
+                  {
+                    "password": "some-password"
+                  }
+      responses:
+        "200":
+          description: Token created with success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Token"
+              examples:
+                "0":
+                  value: >-
+                    {
+                      "token": "b4dc4fe3-30f1-43ea-bf32-87349e3b8cb5",
+                      "key": "48297953007cfb44e3451902d39c5bacf7a4f49369591e511de9f174afa90288f35b4a940a54dfe9f110ac30634443f24667c673fb65ef771954236c51e9b036",
+                      "cidr_whitelist": null,
+                      "readonly": false,
+                      "created": "2017-08-15T07:42:40.811Z",
+                      "updated": "2017-08-15T07:42:40.811Z"
+                    }
+  /-/npm/v1/tokens/token/{uuid}:
+    delete:
+      description: Token delete endpoint
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: uuid
+          description: Key (UUID) of the Token to delete
+          required: true
+          schema:
+            type: string
+            nullable: false
+        - in: header
+          name: 'npm-otp'
+          description: One time password
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Token deleted with success
+  /-/user/token/{token}:
+    delete:
+      description: Token delete endpoint
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: token
+          description: Token to delete
+          required: true
+          schema:
+            type: string
+            nullable: false
+        - in: header
+          name: 'npm-otp'
+          description: One time password
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Token deleted with success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LegacyStatus"
+              examples:
+                "0":
+                  value: >-
+                    {
+                      "ok": true
+                    }
+  /-/npm/v1/hooks:
+    get:
+      description: Hook list endpoint.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: package
+          description: Filter by package name; regexp patterns are not parsed.
+          schema:
+            type: string
+            nullable: false
+        - in: query
+          name: limit
+          description: Return at most N hooks.
+          schema:
+            type: integer
+            nullable: false
+        - in: query
+          name: offset
+          description: Start at the Nth hook (use with limit for pagination).
+          schema:
+            type: integer
+            nullable: false
+      responses:
+        "200":
+          description: Hook list.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HookSearchResults"
+              examples:
+                "0":
+                  value: >-
+                    {
+                      "total": 1,
+                      "objects": [
+                          {
+                            "id": "i2344e1m",
+                            "username": "pichillilorenzo",
+                            "name": "@npmcorp",
+                            "endpoint": "https://example.com/webhook",
+                            "secret": "this is certainly very secret",
+                            "type": "scope",
+                            "created": "2022-10-03T22:23:45.942Z",
+                            "updated": "2022-10-03T22:23:45.942Z",
+                            "delivered": false,
+                            "last_delivery": null,
+                            "response_code": 0,
+                            "status": "active"
+                          }
+                      ]
+                    }
+  /-/npm/v1/hooks/hook:
+    post:
+      description: Hook create endpoint.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: header
+          name: 'npm-otp'
+          description: One time password
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/HookCreateRequest"
+            examples:
+              "0":
+                value: >-
+                  {
+                    "type": "scope",
+                    "name": "@npmcorp",
+                    "endpoint": "https://example.com/webhook",
+                    "secret": "this is certainly very secret"
+                  }
+      responses:
+        "200":
+          description: Hook created with success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Hook"
+              examples:
+                "0":
+                  value: >-
+                    {
+                      "id": "115c73m8",
+                      "username": "pichillilorenzo",
+                      "name": "@npmcorp",
+                      "endpoint": "https://example.com/webhook",
+                      "secret": "this is certainly very secret",
+                      "type": "scope",
+                      "created": "2022-10-03T22:10:52.760Z",
+                      "updated": "2022-10-03T22:10:52.760Z",
+                      "delivered": false,
+                      "last_delivery": null,
+                      "response_code": 0,
+                      "status": "active"
+                    }
+  /-/npm/v1/hooks/hook/{id}:
+    get:
+      description: Get Hook endpoint.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          description: Hook id
+          required: true
+          schema:
+            type: string
+            nullable: false
+      responses:
+        "200":
+          description: Hook found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Hook"
+              examples:
+                "0":
+                  value: >-
+                    {
+                      "id": "115c73m8",
+                      "username": "pichillilorenzo",
+                      "name": "@npmcorp",
+                      "endpoint": "https://example.com/webhook",
+                      "secret": "this is certainly very secret",
+                      "type": "scope",
+                      "created": "2022-10-03T22:10:52.760Z",
+                      "updated": "2022-10-03T22:10:52.760Z",
+                      "delivered": false,
+                      "last_delivery": null,
+                      "response_code": 0,
+                      "status": "active"
+                    }
+    put:
+      description: Hook update endpoint
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          description: Hook id
+          required: true
+          schema:
+            type: string
+            nullable: false
+        - in: header
+          name: 'npm-otp'
+          description: One time password
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/HookUpdateRequest"
+            examples:
+              "0":
+                value: >-
+                  {
+                    "endpoint": "https://example.com/webhook",
+                    "secret": "this is certainly very secret"
+                  }
+      responses:
+        "201":
+          description: Hook updated with success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Hook"
+              examples:
+                "0":
+                  value: >-
+                    {
+                      "id": "115c73m8",
+                      "username": "pichillilorenzo",
+                      "name": "@npmcorp",
+                      "endpoint": "https://example.com/webhook",
+                      "secret": "this is certainly very secret",
+                      "type": "scope",
+                      "created": "2022-10-03T22:10:52.760Z",
+                      "updated": "2022-10-03T22:10:52.760Z",
+                      "delivered": false,
+                      "last_delivery": null,
+                      "response_code": 0,
+                      "status": "active"
+                    }
+    delete:
+      description: Hook delete endpoint
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          description: Hook id
+          required: true
+          schema:
+            type: string
+            nullable: false
+        - in: header
+          name: 'npm-otp'
+          description: One time password
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Hook deleted with success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Hook"
+              examples:
+                "0":
+                  value: >-
+                    {
+                      "id": "115c73m8",
+                      "username": "pichillilorenzo",
+                      "name": "@npmcorp",
+                      "endpoint": "https://example.com/webhook",
+                      "secret": "this is certainly very secret",
+                      "type": "scope",
+                      "created": "2022-10-03T22:10:52.760Z",
+                      "updated": "2022-10-03T22:10:52.760Z",
+                      "delivered": false,
+                      "last_delivery": null,
+                      "response_code": 0,
+                      "status": "active"
+                    }
 
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
   schemas:
     NpmError:
       description: Generic NpmError
@@ -814,14 +1356,469 @@ components:
         error:
           type: string
           description: Error message
+          readOnly: true
         code:
           type: string
+          readOnly: true
         message:
           type: string
           description: Error message
+          readOnly: true
         statusCode:
           type: integer
           description: HTTP Status Code
+          readOnly: true
+
+    PackageVersionsDownloadCount:
+      type: object
+      description: Package download count for specific versions.
+      required:
+        - package
+        - downloads
+      properties:
+        package:
+          type: string
+          description: Package name
+          nullable: false
+          readOnly: true
+        downloads:
+          type: object
+          description: A map containing the package version as key and the download count as value.
+          additionalProperties:
+            type: integer
+            nullable: false
+
+    ProfileTfa:
+      type: object
+      required:
+        - mode
+        - pending
+      properties:
+        mode:
+          type: string
+          nullable: false
+          readOnly: true
+        pending:
+          type: boolean
+          nullable: false
+          readOnly: true
+
+    Profile:
+      type: object
+      required:
+        - name
+        - email
+        - email_verified
+        - created
+        - upadted
+      properties:
+        tfa:
+          description: User Two-Factor authentication settings
+          readOnly: true
+        name:
+          type: string
+          description: User name
+          nullable: false
+          readOnly: true
+        email:
+          type: string
+          description: User email
+          nullable: false
+          readOnly: true
+        email_verified:
+          type: boolean
+          description: Email verification status
+          nullable: false
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          description: When the account was created
+          nullable: false
+          readOnly: true
+        updated:
+          type: string
+          format: date-time
+          description: When the account was updated
+          nullable: false
+          readOnly: true
+        cidr_whitelist:
+          type: array
+          items:
+            type: string
+            nullable: false
+          description: CIDR whitelist
+          readOnly: true
+        fullname:
+          type: string
+          description: User full name
+          readOnly: true
+        homepage:
+          type: string
+          format: uri
+          description: User homepage url
+          readOnly: true
+        freenode:
+          type: string
+          readOnly: true
+        twitter:
+          type: string
+          description: Twitter username
+          readOnly: true
+        github:
+          type: string
+          description: GitHub username
+          readOnly: true
+
+    PasswordUpdateRequest:
+      type: object
+      required:
+        - old
+        - new
+      properties:
+        old:
+          type: string
+          nullable: false
+        new:
+          type: string
+          nullable: false
+
+    ProfileUpdateRequest:
+      type: object
+      properties:
+        tfa:
+          description: User Two-Factor authentication settings
+        password:
+          description: Password change request data
+          $ref: '#/components/schemas/PasswordUpdateRequest'
+        email:
+          type: string
+          description: User email
+        fullname:
+          type: string
+          description: User full name
+        homepage:
+          type: string
+          format: uri
+          description: User homepage url
+        freenode:
+          type: string
+        twitter:
+          type: string
+          description: Twitter username
+        github:
+          type: string
+          description: GitHub username
+
+    PageUrls:
+      type: object
+      description: Urls to navigate results
+      properties:
+        next:
+          type: string
+          format: uri
+          description: Url of the next results
+          readOnly: true
+        prev:
+          type: string
+          format: uri
+          description: Url of the previous results
+          readOnly: true
+
+    Page:
+      type: object
+      description: A container object for pages of lists.
+      required:
+        - objects
+        - urls
+      properties:
+        total:
+          type: integer
+          description: Number of total items
+          readOnly: true
+        objects:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+            nullable: false
+            readOnly: true
+          nullable: false
+          readOnly: true
+        urls:
+          description: Urls to navigate results
+          $ref: '#/components/schemas/PageUrls'
+
+    TokenPage:
+      description: Objects containing the list of user's tokens
+      allOf:
+        - $ref: "#/components/schemas/Page"
+        - type: object
+          required:
+            - userHasOldFormatToken
+          properties:
+            userHasOldFormatToken:
+              type: boolean
+              nullable: false
+
+    Token:
+      type: object
+      required:
+        - token
+        - key
+        - automation
+        - created
+        - updated
+        - readonly
+      properties:
+        token:
+          type: string
+          description: \[REDACTED\] on subsequent display. The "Bearer" token.
+          nullable: false
+          readOnly: true
+        key:
+          type: string
+          description: sha512 hash of the token UUID
+          nullable: false
+          readOnly: true
+        automation:
+          type: boolean
+          nullable: false
+          readOnly: true
+        cidr_whitelist:
+          type: array
+          items:
+            type: string
+            nullable: false
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          nullable: false
+          readOnly: true
+        updated:
+          type: string
+          format: date-time
+          nullable: false
+          readOnly: true
+        readonly:
+          type: boolean
+          nullable: false
+          readOnly: true
+
+    TokenCreationRequest:
+      type: object
+      required:
+        - password
+      properties:
+        password:
+          type: string
+          description: NPM User password
+          nullable: false
+        readonly:
+          type: boolean
+        cidr_whitelist:
+          type: array
+          items:
+            type: string
+            nullable: false
+
+    LegacyStatus:
+      type: object
+      required:
+        - ok
+      properties:
+        ok:
+          type: boolean
+          description: If operation succeded.
+          nullable: false
+          readOnly: true
+
+    HookType:
+      type: string
+      description: Type of object being watched; `package`, `scope`, or `owner`.
+      enum:
+        - package
+        - scope
+        - owner
+
+    HookCreateRequest:
+      type: object
+      description: Hook creation request object
+      required:
+        - type
+        - name
+        - endpoint
+        - secret
+      properties:
+        type:
+          $ref: '#/components/schemas/HookType'
+          nullable: false
+        name:
+          type: string
+          description: Name of package or organization/user scope to watch, e.g, `@scope` or `package`.
+          nullable: false
+        endpoint:
+          type: string
+          format: uri
+          description: Full uri of the endpoint to post the notification to.
+          nullable: false
+        secret:
+          type: string
+          description: A secret shared between the registry & you; used to sign the payload.
+          nullable: false
+
+    HookUpdateRequest:
+      type: object
+      description: Hook update request object
+      required:
+        - endpoint
+        - secret
+      properties:
+        endpoint:
+          type: string
+          format: uri
+          description: Full uri of the endpoint to post the notification to.
+          nullable: false
+        secret:
+          type: string
+          description: A secret shared between the registry & you; used to sign the payload.
+          nullable: false
+
+    Hook:
+      type: object
+      description: Hook object
+      required:
+        - id
+        - username
+        - name
+        - endpoint
+        - secret
+        - type
+        - created
+        - updated
+        - delivered
+        - response_code
+        - status
+      properties:
+        id:
+          type: string
+          description: Hook id
+          nullable: false
+          readOnly: true
+        username:
+          type: string
+          description: NPM user name.
+          nullable: false
+          readOnly: true
+        name:
+          type: string
+          description: Name of package or organization/user scope to watch, e.g, `@scope` or `package`.
+          nullable: false
+          readOnly: true
+        endpoint:
+          type: string
+          format: uri
+          description: Full uri of the endpoint to post the notification to.
+          nullable: false
+          readOnly: true
+        secret:
+          type: string
+          description: A secret shared between the registry & you; used to sign the payload.
+          nullable: false
+          readOnly: true
+        type:
+          $ref: '#/components/schemas/HookType'
+          nullable: false
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          description: Hook creation date
+          nullable: false
+          readOnly: true
+        updated:
+          type: string
+          format: date-time
+          description: Hook update date
+          nullable: false
+          readOnly: true
+        delivered:
+          type: boolean
+          nullable: false
+          readOnly: true
+        last_delivery:
+          type: string
+          format: date-time
+          description: Hook last delivery date
+          readOnly: true
+        response_code:
+          type: integer
+          description: Response code
+          readOnly: true
+        status:
+          type: string
+          description: Hook status
+          nullable: false
+          readOnly: true
+        deleted:
+          type: boolean
+          description: If the Hook has been deleted
+          readOnly: true
+
+    HookSearchResults:
+      description: It contains the results returned by the hook search.
+      type: object
+      required:
+        - objects
+        - total
+      properties:
+        objects:
+          type: array
+          items:
+            $ref: "#/components/schemas/Hook"
+          readOnly: true
+          nullable: false
+        total:
+          type: integer
+          description: Total number of search results corresponding to a query; may be higher than the number of `objects`
+          nullable: false
+          readOnly: true
+
+    LoginRequest:
+      type: object
+      required:
+        - name
+        - password
+      properties:
+        name:
+          type: string
+          nullable: false
+          description: NPM username.
+        password:
+          type: string
+          nullable: false
+          description: NPM user password.
+        readonly:
+          type: boolean
+        cidr_whitelist:
+          type: array
+          items:
+            type: string
+            nullable: false
+
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Bearer token
+          readOnly: true
+        ok:
+          type: boolean
+          description: If login succeded
+          nullable: false
+          readOnly: true
 
     RegistryMetadataOther:
       type: object
