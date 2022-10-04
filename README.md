@@ -50,5 +50,3 @@ openapi-generator-cli generate -i https://cdn.jsdelivr.net/gh/pichillilorenzo/np
 ## License
 
 Released under the [ISC](/LICENSE) license.
-
-This project is strongly inspired by the [node-query-registry](https://github.com/velut/node-query-registry).
